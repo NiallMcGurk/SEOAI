@@ -44,7 +44,17 @@ public class Main {
                 for(Element link : doc.select("a[href]"))
                 {
                     String next_link = link.absUrl("href");
-                    if (visited.contains(next_link) == false && !next_link.contains("tel:") && !next_link.contains("#contentarea"))
+                    if (visited.contains(next_link) == false && next_link.contains("weirandsons.ie")
+                                                            && !next_link.contains("tel:")
+                                                            && !next_link.contains("#")
+                                                            && next_link.contains("weirandsons.ie")
+                                                            && !next_link.contains("/customer/")
+                                                            && !next_link.contains("/catalog/")
+                                                            && !next_link.contains("/catalog/")
+                                                            && !next_link.contains("/checkout/")
+                                                            && !next_link.contains("/index.php/")
+                                                            && !next_link.contains("%2C")
+                    )
                     {
                         crawl(level++, next_link, visited);
                     }
@@ -88,20 +98,17 @@ public class Main {
                 try (CSVWriter writer = new CSVWriter(new FileWriter("C:\\Users\\niall\\Documents\\GitHub\\SEOAI\\Export\\export.csv"))) {
                     writer.writeAll(csvData);
                 } catch (IOException e) {
-                    System.out.println("Error creating new Line");
+                    System.out.println("Error updating .csv file");
                 }
 
                 System.out.println("Line:" + url + " | " + Title);
-                System.out.println(metaTags);
-                System.out.println("********************" + metaDescPaste);
-                System.out.println("********************" + metaKeyPaste);
                 v.add(url);
                 return doc;
             }
             return null;
         }
         catch(IOException e){
-            System.out.println("Error");
+            System.out.println("Error attempting URL: " + url);
             return null;
         }
     }
