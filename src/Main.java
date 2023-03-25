@@ -18,7 +18,7 @@ public class Main {
     {
         String url = "https://weirandsons.ie";
         CreateCSV();
-        crawl(1, url, new ArrayList<String>());
+        crawl(5, url, new ArrayList<String>());
     }
 
     public static void CreateCSV()
@@ -44,12 +44,10 @@ public class Main {
                 for(Element link : doc.select("a[href]"))
                 {
                     String next_link = link.absUrl("href");
-                    if (visited.contains(next_link) == false && next_link.contains("weirandsons.ie")
+                    if (visited.contains(next_link) == false && next_link.contains("https://weirandsons.ie")
                                                             && !next_link.contains("tel:")
                                                             && !next_link.contains("#")
-                                                            && next_link.contains("weirandsons.ie")
                                                             && !next_link.contains("/customer/")
-                                                            && !next_link.contains("/catalog/")
                                                             && !next_link.contains("/catalog/")
                                                             && !next_link.contains("/checkout/")
                                                             && !next_link.contains("/index.php/")
