@@ -1,8 +1,12 @@
+import java.io.BufferedReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
-
+import org.json.JSONObject;
 import org.jsoup.Jsoup;
 import org.jsoup.Connection;
 import org.jsoup.nodes.Document;
@@ -12,10 +16,12 @@ import org.jsoup.select.Elements;
 
 public class Main {
 
+
+
     private static List<String[]> csvData;
 
-    public static void main(String[] args)
-    {
+    public static void main(String[] args) throws Exception {
+        chatGPT("Give me your thoughts on AI in 5 words?");
         String url = "https://weirandsons.ie";
         CreateCSV();
         crawl(5, url, new ArrayList<String>());
@@ -117,5 +123,28 @@ public class Main {
         List<String[]> list = new ArrayList<>();
         list.add(header);
         return list;
+    }
+
+    public static void chatGPT(String text) throws Exception {
+        String url = "https://api.openai.com/v1/completions";
+        HttpURLConnection con = (HttpURLConnection) new URL(url).openConnection();
+
+        con.setRequestMethod("POST");
+        con.setRequestProperty("Content-Type", "application/json");
+        con.setRequestProperty("Authorization", "Bearer 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");
+
+        JSONObject data = new JSONObject();
+        data.put("model", "text-davinci-003");
+        data.put("prompt", text);
+        data.put("max_tokens", 4000);
+        data.put("temperature", 1.0);
+
+        con.setDoOutput(true);
+        con.getOutputStream().write(data.toString().getBytes());
+
+        String output = new BufferedReader(new InputStreamReader(con.getInputStream())).lines()
+                .reduce((a, b) -> a + b).get();
+
+        System.out.println(new JSONObject(output).getJSONArray("choices").getJSONObject(0).getString("text"));
     }
 }
